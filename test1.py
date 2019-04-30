@@ -14,6 +14,21 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+
+max_value = 255
+max_value_H = 360//2
+low_H = 0
+low_S = 0
+low_V = 55
+high_H = max_value_H
+high_S = max_value
+high_V = max_value
+low_H_name = 'Low H'
+low_S_name = 'Low S'
+low_V_name = 'Low V'
+high_H_name = 'High H'
+high_S_name = 'High S'
+high_V_name = 'High V'
   
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -54,9 +69,10 @@ for color in colors:
         upper = np.array([100, 120,  80])
  
     # find the colors within the specified boundaries
-    image_mask = cv2.inRange(image_to_process, lower, upper)
+    image_mask = cv2.cvtColor(image_to_process, cv2.COLOR_BGR2HSV)
+    image_threshold = cv2.inRange(image_mask, (low_H, low_S, low_V), (high_H, high_S, high_V))
     # apply the mask
-    image_res = cv2.bitwise_and(image_to_process, image_to_process, mask = image_mask)
+    image_res = cv2.bitwise_and(image_to_process, image_to_process, mask = image_threshold)
  
     ## load the image, convert it to grayscale, and blur it slightly
     image_gray = cv2.cvtColor(image_res, cv2.COLOR_BGR2GRAY)
@@ -77,7 +93,7 @@ for color in colors:
     for c in cnts:
         
         # if the contour is not sufficiently large, ignore it
-        if cv2.contourArea(c) < 10:
+        if cv2.contourArea(c) < 20:
             continue
          
         # compute the Convex Hull of the contour
@@ -96,4 +112,4 @@ for color in colors:
     print("{} {} colonies".format(counter[color],color))
  
 # Writes the output image
-cv2.imwrite(args["output"],image_contours)
+cv2.imwrite(args["output"],(image_contours))
