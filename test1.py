@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Bacteria counter
- 
-    Counts blue and white bacteria on a Petri dish
- 
-    python bacteria_counter.py -i [imagefile] -o [imagefile]
- 
-@author: Alvaro Sebastian (www.sixthresearcher.com)
-"""
  
 # import the necessary packages
 import numpy as np
 import argparse
 import imutils
 import cv2
+import sys
 
 max_value = 255
 max_value_H = 360//2
@@ -31,18 +23,18 @@ high_S_name = 'High S'
 high_V_name = 'High V'
   
 # construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-    help="path to the input image")
-ap.add_argument("-o", "--output", required=True,
-    help="path to the output image")
-args = vars(ap.parse_args())
+#ap = argparse.ArgumentParser()
+#ap.add_argument("-i", "--image", required=True,
+#    help="path to the input image")
+#ap.add_argument("-o", "--output", required=True,
+#    help="path to the output image")
+#args = vars(ap.parse_args())
   
 # dict to count colonies
 counter = {}
  
 # load the image
-image_orig = cv2.imread(args["image"])
+image_orig = cv2.imread(sys.argv[1])
 height_orig, width_orig = image_orig.shape[:2]
  
 # output image with contours
@@ -109,7 +101,7 @@ for color in colors:
         #cv2.putText(image_contours, "{:.0f}".format(cv2.contourArea(c)), (int(hull[0][0][0]), int(hull[0][0][1])), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
  
     # Print the number of colonies of each color
-    print("{} {} colonies".format(counter[color],color))
+    print(counter[color])
  
 # Writes the output image
-cv2.imwrite(args["output"],(image_contours))
+cv2.imwrite(sys.argv[2],(image_contours))
