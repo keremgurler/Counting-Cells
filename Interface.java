@@ -37,6 +37,8 @@ import javax.swing.JScrollPane;
 public class Interface extends JFrame {
 	private static Object[][] columnData;
 	private JPanel contentPane;
+	private JPanel panel;
+	private JPanel panel_1;
 
 	/**
 	 * Launch the application.
@@ -101,46 +103,40 @@ public class Interface extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		buttonDisplay.setBounds(61, 24, 97, 25);
+		buttonDisplay.setBounds(135, 41, 114, 35);
 		contentPane.add(buttonDisplay);
 		String[] listItems1 = { "Coccus", "Spiral", "Bacillus" };
-		JComboBox comboBox1 = new JComboBox(listItems1);
-		comboBox1.setBounds(435, 24, 113, 25);
-		contentPane.add(comboBox1);
 
 		String[] listItems2 = { "Length", "Count" };
 		JComboBox comboBox2 = new JComboBox(listItems2);
-		comboBox2.setBounds(778, 25, 108, 25);
+		comboBox2.setBounds(747, 41, 114, 35);
 		contentPane.add(comboBox2);
 
-		JLabel lblShapeOfCells = new JLabel("Shape of Cells");
-		lblShapeOfCells.setBounds(307, 24, 90, 25);
-		contentPane.add(lblShapeOfCells);
-
 		JLabel lblLengthOrCount = new JLabel("Length or Count");
-		lblLengthOrCount.setBounds(634, 25, 97, 23);
+		lblLengthOrCount.setBounds(605, 47, 97, 23);
 		contentPane.add(lblLengthOrCount);
 
 		String[] HistoryList = { "1st experiment", "2nd experiment", "3rd experiment", "4th experiment" };
 
-		JPanel panel = new JPanel();
-		panel.setBounds(61, 124, 423, 311);
+		panel = new JPanel();
+		panel.setBounds(65, 124, 423, 311);
 		contentPane.add(panel);
 		panel.setLayout(null);
+
 
 		JLabel lblWorkHistory = new JLabel("Work History");
 		lblWorkHistory.setBounds(29, 13, 124, 16);
 		panel.add(lblWorkHistory);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 42, 399, 256);
+		scrollPane.setBounds(12, 42, 400, 256);
 		panel.add(scrollPane);
 
 		String[] columnNames = { "Date", "Count" };
 		JTable workHistory = new JTable(columnData, columnNames);
 		scrollPane.setViewportView(workHistory);
 
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		panel_1.setBounds(563, 124, 423, 311);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
