@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.RenderedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +28,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -45,8 +48,22 @@ public class Interface extends JFrame {
 	 * 
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws IOException {
-
+	public static void main(String[] args) throws IOException  {
+		readHistory();
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Interface frame = new Interface();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public static void readHistory() throws IOException {
 		File historyFile = new File(System.getProperty("user.home") + "\\history.csv");
 
 		try {
@@ -74,17 +91,6 @@ public class Interface extends JFrame {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Interface frame = new Interface();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 	/**
@@ -105,12 +111,11 @@ public class Interface extends JFrame {
 		});
 		buttonDisplay.setBounds(135, 41, 114, 35);
 		contentPane.add(buttonDisplay);
-		String[] listItems1 = { "Coccus", "Spiral", "Bacillus" };
-
-		String[] listItems2 = { "Length", "Count" };
-		JComboBox comboBox2 = new JComboBox(listItems2);
-		comboBox2.setBounds(747, 41, 114, 35);
-		contentPane.add(comboBox2);
+		String[] listLengthCount = { "Length", "Count" };
+		
+		JComboBox lengthCountSelection = new JComboBox(listLengthCount);
+		lengthCountSelection.setBounds(747, 41, 114, 35);
+		contentPane.add(lengthCountSelection);
 
 		JLabel lblLengthOrCount = new JLabel("Length or Count");
 		lblLengthOrCount.setBounds(605, 47, 97, 23);
@@ -144,6 +149,15 @@ public class Interface extends JFrame {
 		Canvas canvas = new Canvas();
 		canvas.setBounds(10, 10, 276, 198);
 		panel_1.add(canvas);
+		
+		String[] microscopeTypes = {"optic", "fluoroscent", "TEM"};
+		JComboBox microscopeSelection = new JComboBox(microscopeTypes);
+		microscopeSelection.setBounds(424, 41, 107, 35);
+		contentPane.add(microscopeSelection);
+		
+		JLabel lblMicroscopeType = new JLabel("Microscope Type");
+		lblMicroscopeType.setBounds(305, 44, 107, 29);
+		contentPane.add(lblMicroscopeType);
 
 		buttonDisplay.addActionListener(new ActionListener() {
 
@@ -161,6 +175,7 @@ public class Interface extends JFrame {
 					String path = selectedFile.getAbsolutePath();
 					try {
 						Image image = ImageIO.read(new File(path));
+						
 						JDialog imageDialog = new JDialog();
 						imageDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 						imageDialog.setTitle("image");
@@ -173,6 +188,25 @@ public class Interface extends JFrame {
 						imageDialog.getContentPane().add(imgLabel);
 						imageDialog.pack();
 						imageDialog.setVisible(true);
+						
+						String[] options = {"Count and Save", "Discard"};
+				        int x = JOptionPane.showOptionDialog(null, "",
+				                "Click a button",
+				                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+				        System.out.println(x);
+				        if(x == 0) {
+				        	
+				        	ProcessBuilder pb = new ProcessBuilder("C:\\Python27\\python.exe", "C:\\Python27\\LengthAndCount.py",path, path.concat("_out.jpg"));
+							Process p = pb.start();
+							
+							
+							BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+							String s = null;
+							while ((s= in.readLine())!= null )
+								System.out.println(s);
+				        	
+				        }
+
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
