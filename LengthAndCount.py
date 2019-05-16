@@ -3,7 +3,10 @@ from __future__ import division
 import cv2 as cv
 import numpy as np
 import argparse
+<<<<<<< HEAD
 import sys
+=======
+>>>>>>> ba8746e19fad2b7fddfff28cf529157c18a89d76
 from math import atan2, cos, sin, sqrt, pi
 
     
@@ -34,6 +37,7 @@ def getOrientation(pts, img, order):
     cntr = (int(mean[0,0]), int(mean[0,1]))
     getLength(pts,cntr, order)    
     font = cv.FONT_HERSHEY_SIMPLEX
+<<<<<<< HEAD
     cv.putText(src,str(order),cntr, font, 2,(0,255,255),2,cv.LINE_AA)
    
     angle = atan2(eigenvectors[0,1], eigenvectors[0,0]) # orientation in radians
@@ -41,6 +45,21 @@ def getOrientation(pts, img, order):
     return angle
 
 src = cv.imread(cv.samples.findFile(sys.argv[1]))
+=======
+    cv.putText(src,str(order),cntr, font, 0.5,(0,255,255),1,cv.LINE_AA)
+    #cv.circle(img, cntr, 3, (255, 0, 255), 2)
+    p1 = (cntr[0] + 0.02 * eigenvectors[0,0] * eigenvalues[0,0], cntr[1] + 0.02 * eigenvectors[0,1] * eigenvalues[0,0])
+    p2 = (cntr[0] - 0.02 * eigenvectors[1,0] * eigenvalues[1,0], cntr[1] - 0.02 * eigenvectors[1,1] * eigenvalues[1,0])
+    angle = atan2(eigenvectors[0,1], eigenvectors[0,0]) # orientation in radians
+		
+    return angle
+parser = argparse.ArgumentParser(description='Code for Introduction to Principal Component Analysis (PCA) tutorial.\
+                                              This program demonstrates how to use OpenCV PCA to extract the orientation of an object.')
+parser.add_argument('--input', help='Path to input image.', default='pca_test1.jpg')
+parser.add_argument('--output', help='Path to output image',)
+args = parser.parse_args()
+src = cv.imread(cv.samples.findFile(args.input))
+>>>>>>> ba8746e19fad2b7fddfff28cf529157c18a89d76
 
 # Check if image is loaded successfully
 if src is None:
@@ -61,13 +80,21 @@ for i, c in enumerate(contours):
     if area < 1e2 or 1e5 < area:
         continue
     # Draw each contour only for visualization purposes	
+<<<<<<< HEAD
     cv.drawContours(src, contours, i, (0, 0, 255), 2); 
+=======
+    cv.drawContours(src, contours, i, (0, 0, 255), 1); 
+>>>>>>> ba8746e19fad2b7fddfff28cf529157c18a89d76
     count += 1
     	
     # Find the orientation of each shape
     getOrientation(c, src , count)
 	
+<<<<<<< HEAD
 #cv.imshow('output', src)
 cv.imwrite(sys.argv[2],src)
+=======
+cv.imshow('output', src)
+>>>>>>> ba8746e19fad2b7fddfff28cf529157c18a89d76
 print(count)
 cv.waitKey()
